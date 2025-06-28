@@ -3,17 +3,21 @@ import numpy as np
 import cv2
 import os
 from tensorflow.keras.models import load_model
-from PIL import Image
+from tensorflow.config import set_visible_devices
 
 app = Flask(__name__)
 
+# Disable GPU
+set_visible_devices([], 'GPU')
+
 # Load your trained model
 model = load_model('emotion.h5')
+model.make_predict_function()  # Required for thread safety
 
-# Emotion labels - change if your model uses different ones
+# Emotion labels
 emotion_labels = ['Angry', 'Disgust', 'Fear', 'Happy', 'Sad', 'Surprise', 'Neutral']
 
-# Use OpenCV's face detector
+# Face detector
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
 def preprocess_image(image_path):
@@ -36,19 +40,29 @@ def preprocess_image(image_path):
 def index():
     emotion = None
     if request.method == 'POST':
+        if 'image' not in request.files:
+            return render_template('index.html', emotion="No file uploaded")
+            
         file = request.files['image']
-        filepath = os.path.join('Static', 'uploaded_image.jpg')
-        file.save(filepath)
-
-        face_input = preprocess_image(filepath)
-        if face_input is not None:
-            prediction = model.predict(face_input)
-            emotion = emotion_labels[np.argmax(prediction)]
-        else:
-            emotion = "No face detected"
+        if file.filename == '':
+            return render_template('index.html', emotion="No file selected")
+            
+        try:
+            os.makedirs('static', exist_ok=True)
+            filepath = os.path.join('static', 'uploaded_image.jpg')
+            file.save(filepath)
+            
+            face_input = preprocess_image(filepath)
+            if face_input is not None:
+                prediction = model.predict(face_input)
+                emotion = emotion_labels[np.argmax(prediction)]
+            else:
+                emotion = "No face detected"
+        except Exception as e:
+            emotion = f"Error: {str(e)}"
 
     return render_template('index.html', emotion=emotion)
 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))  # Use PORT environment variable (Render uses this)
-    app.run(host='0.0.0.0', port=port, debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port, debug=False)  # debug=False for production
