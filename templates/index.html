@@ -288,9 +288,196 @@
                 align-items: center;
             }
         }
+
+        /* Navbar */
+                .navbar {
+            background: white;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-family: 'Montserrat', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .navbar-brand img {
+            height: 30px;
+        }
+        
+        .navbar-links {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+        
+        .nav-link {
+            color: var(--dark-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+        
+        .nav-link:hover {
+            color: var(--primary-color);
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .try-now-btn {
+            background: var(--primary-color);
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: 50px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            box-shadow: 0 4px 10px rgba(108, 99, 255, 0.2);
+        }
+        
+        .try-now-btn:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(108, 99, 255, 0.3);
+        }
+        
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            width: 24px;
+            height: 24px;
+            position: relative;
+            background: none;
+            border: none;
+            z-index: 1001;
+        }
+        
+        .hamburger span {
+            display: block;
+            width: 100%;
+            height: 2px;
+            background: var(--primary-color);
+            position: absolute;
+            left: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .hamburger span:nth-child(1) {
+            top: 6px;
+        }
+        
+        .hamburger span:nth-child(2) {
+            top: 12px;
+        }
+        
+        .hamburger span:nth-child(3) {
+            top: 18px;
+        }
+        
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg);
+            top: 12px;
+        }
+        
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+        
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg);
+            top: 12px;
+        }
+        
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem;
+            }
+            
+            .navbar-links {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 70px);
+                background: white;
+                flex-direction: column;
+                justify-content: flex-start;
+                padding: 2rem;
+                gap: 2rem;
+                transition: left 0.3s ease;
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            }
+            
+            .navbar-links.active {
+                left: 0;
+            }
+            
+            .hamburger {
+                display: block;
+            }
+            
+            .try-now-btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
     </style>
 </head>
 <body>
+    <nav class="navbar">
+        <a href="/" class="navbar-brand">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 12a10 10 0 0 0-20 0 10 10 0 0 0 20 0z"></path>
+                <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
+                <line x1="9" y1="9" x2="9.01" y2="9"></line>
+                <line x1="15" y1="9" x2="15.01" y2="9"></line>
+            </svg>
+            EmotionAI
+        </a>
+        
+        <button class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        
+        <div class="navbar-links">
+            <a href="/" class="nav-link">Home</a>
+            <a href="#how-it-works" class="nav-link">How It Works</a>
+            <a href="#about" class="nav-link">About</a>
+            <a href="#contact" class="nav-link">Contact</a>
+            <a href="/" class="try-now-btn">Try Now</a>
+        </div>
+    </nav>
+
     <div class="container">
         <header>
             <h1>Emotion Recognition AI</h1>
@@ -313,17 +500,20 @@
             </div>
         </header>
         
-        <div class="upload-box">
-            <form method="POST" enctype="multipart/form-data">
-                <label for="file-input" class="upload-label">Upload a clear face photo for emotion analysis</label>
-                <input type="file" id="file-input" class="file-input" name="image" accept="image/*" required>
-                <label for="file-input" class="custom-file-input">Choose Image</label>
-                <div style="margin: 1.5rem 0; color: var(--gray-color); font-size: 0.9rem;">
-                    Supports JPG, PNG, WEBP (Max 5MB)
-                </div>
-                <input type="submit" class="submit-btn" value="Analyze Emotion">
-            </form>
+ <div class="upload-box">
+    <form method="POST" enctype="multipart/form-data">
+        <label for="file-input" class="upload-label">Upload a clear face photo for emotion analysis</label>
+        <input type="file" id="file-input" class="file-input" name="image" accept="image/*" required>
+        <label for="file-input" class="custom-file-input">Choose Image</label>
+        <div style="margin: 1.5rem 0; color: var(--gray-color); font-size: 0.9rem;">
+            Supports JPG, PNG, WEBP (Max 5MB)
         </div>
+        <div id="image-preview" style="display: none; margin: 1rem auto; max-width: 300px;">
+            <img id="preview-image" src="#" alt="Preview" style="max-width: 100%; border-radius: 8px; display: none;">
+        </div>
+        <input type="submit" class="submit-btn" value="Analyze Emotion">
+    </form>
+</div>
         
         {% if emotion %}
         <div class="result-container" style="display: block;">
@@ -334,15 +524,36 @@
         </div>
         {% endif %}
         
-        <footer>
-            <p>© 2023 Sarthak's Emotion AI | All Rights Reserved</p>
-            <div class="social-links">
-                <a href="#" class="social-link">GitHub</a>
-                <a href="#" class="social-link">LinkedIn</a>
-                <a href="#" class="social-link">Twitter</a>
-                <a href="#" class="social-link">Portfolio</a>
-            </div>
-        </footer>
+<footer>
+    <p>© 2025 Sarthak's Emotion AI | All Rights Reserved</p>
+    <div class="social-links">
+        <a href="https://github.com/sarthakmhalsekar18" class="social-link" target="_blank">GitHub</a>
+        <a href="https://www.linkedin.com/in/sarthak-mhalsekar/" class="social-link" target="_blank">LinkedIn</a>
     </div>
+</footer>
+
+    </div>
+<script>
+    document.getElementById('file-input').addEventListener('change', function(e) {
+        const previewContainer = document.getElementById('image-preview');
+        const previewImage = document.getElementById('preview-image');
+        const file = e.target.files[0];
+        
+        if (file) {
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                previewImage.src = e.target.result;
+                previewImage.style.display = 'block';
+                previewContainer.style.display = 'block';
+            }
+            
+            reader.readAsDataURL(file);
+        } else {
+            previewImage.style.display = 'none';
+            previewContainer.style.display = 'none';
+        }
+    });
+</script>
 </body>
 </html>
