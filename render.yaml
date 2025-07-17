@@ -1,24 +1,9 @@
-# services:
-#   - type: web
-#     name: emotion-detector
-#     runtime: python
-#     buildCommand: ""
-#     startCommand: python app.py
-#     envVars:
-#       - key: FLASK_ENV
-#         value: production
-# Exported from Render on 2025-07-17T06:06:10Z
 services:
-- type: web
-  name: emotion-detector
-  runtime: python
-  repo: https://github.com/sarthakmhalsekar18/emotion-detector
-  plan: free
-  envVars:
-  - key: PYTHON_VERSION
-    sync: false
-  region: oregon
-  buildCommand: pip install -r requirements.txt
-  startCommand: python app.py
-  autoDeployTrigger: "off"
-version: "1"
+  - type: web
+    name: emotion-detector
+    runtime: python
+    buildCommand: ""
+    startCommand: python app.py
+    envVars:
+      - key: FLASK_ENV
+        value: production
