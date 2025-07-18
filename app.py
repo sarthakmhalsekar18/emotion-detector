@@ -63,6 +63,11 @@ def index():
 
     return render_template('index.html', emotion=emotion)
 
+@app.route('/howitworks')  # No dashes
+def how_it_works():
+    return render_template('howitworks.html')
+
+
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=False)  # debug=False for production
